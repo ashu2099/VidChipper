@@ -1,4 +1,6 @@
-import SinglePartChipper from "../SinglePartChipper/SinglePartChipper";
+import EqualSegmentChipper from "../EqualSegmentChipper/EqualSegmentChipper";
+
+// import SinglePartChipper from "../SinglePartChipper/SinglePartChipper";
 
 import useVidChipper from "./useVidChipper";
 
@@ -22,7 +24,7 @@ export default () => {
 
       <input type="file" onChange={videoFileUploaded} />
 
-      <SinglePartChipper />
+      <EqualSegmentChipper />
     </>
   ) : (
     <div>Loading ffmpeg-core</div>

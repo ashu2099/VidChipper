@@ -1,11 +1,13 @@
 import { useState, useCallback, useEffect } from "react";
 
+import { getFromCommonStore } from "../../utils/commonStore";
+
 import {
   calculateEncodingProgress,
-  getFromCommonStore,
   validateSplitDuration,
   validateTimestamp,
-} from "../../utils/commonStore";
+} from "./singleChipperUtils";
+
 import { pubSub, pubSubEvents } from "../../utils/pubSub";
 
 export default () => {
@@ -48,6 +50,7 @@ export default () => {
       const fileExtension = getFromCommonStore("videoFileExtension");
 
       setIsVideoSplitting(true);
+      setSplitProgress("Splitting Video");
 
       const params = [
         "-i",
@@ -80,7 +83,6 @@ export default () => {
       }
 
       setSplitProgress("Split Video");
-
       setIsVideoSplitting(false);
     },
     []
@@ -100,13 +102,9 @@ export default () => {
         endTimestamp
       );
 
-      let progressToBeShown = "Splitting Video";
-
       if (progress && progress < 100) {
-        progressToBeShown = `Splitting: ${progress.toFixed(2)} %`;
+        setSplitProgress(`Splitting: ${progress.toFixed(2)} %`);
       }
-
-      setSplitProgress(progressToBeShown);
     },
     [endTimestamp, startTimestamp]
   );
