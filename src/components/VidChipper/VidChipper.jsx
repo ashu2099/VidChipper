@@ -1,4 +1,5 @@
-import VideoPart from "../VideoPart/VideoPart";
+import SinglePartChipper from "../SinglePartChipper/SinglePartChipper";
+
 import useVidChipper from "./useVidChipper";
 
 export default () => {
@@ -21,7 +22,7 @@ export default () => {
 
       <input type="file" onChange={videoFileUploaded} />
 
-      <VideoPart />
+      <SinglePartChipper />
     </>
   ) : (
     <div>Loading ffmpeg-core</div>

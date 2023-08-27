@@ -1,6 +1,6 @@
 import { Button } from "../UI";
 
-import useVideoPart from "./useVideoPart";
+import useVideoPart from "./useSinglePartChipper";
 
 export default () => {
   const {
