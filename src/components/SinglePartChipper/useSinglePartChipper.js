@@ -9,6 +9,7 @@ import {
 } from "./singleChipperUtils";
 
 import { pubSub, pubSubEvents } from "../../utils/pubSub";
+import { generateParamsForSingleSplit } from "../../utils/ffmpegParamUtils";
 
 export default () => {
   const [isVideoFileUploaded, setIsVideoFileUploaded] = useState(false);
@@ -52,17 +53,12 @@ export default () => {
       setIsVideoSplitting(true);
       setSplitProgress("Splitting Video");
 
-      const params = [
-        "-i",
-        `input.${fileExtension}`,
-        "-ss",
+      const params = generateParamsForSingleSplit(
+        fileExtension,
         startTimeStamp,
-        "-to",
         endTimeStamp,
-        "-map",
-        "0",
-        `${outputFileName}.${fileExtension}`,
-      ];
+        outputFileName
+      );
 
       console.log(params);
 

@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from "react";
 
 import { getFromCommonStore } from "../../utils/commonStore";
 import { pubSub, pubSubEvents } from "../../utils/pubSub";
-import { generateArgsForEqualSplit } from "../../utils/ffmpegArgs";
+import { generateParamsForEqualSplit } from "../../utils/ffmpegParamUtils";
 import {
   calculateEqualSplitProgress,
   validateSegmentDuration,
@@ -40,7 +40,7 @@ export default () => {
     setIsVideoSplitting(true);
     setSplitProgress("Splitting Video");
 
-    const params = generateArgsForEqualSplit(fileExtension, duration);
+    const params = generateParamsForEqualSplit(fileExtension, duration);
 
     const processingResponse = await ffmpegRef.current.exec(params);
 
