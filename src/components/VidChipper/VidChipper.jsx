@@ -1,10 +1,10 @@
+import SinglePartChipper from "../SinglePartChipper/SinglePartChipper";
 import EqualSegmentChipper from "../EqualSegmentChipper/EqualSegmentChipper";
-
-// import SinglePartChipper from "../SinglePartChipper/SinglePartChipper";
+import FormatConverter from "../FormatConvertor/FormatConverter";
 
 import useVidChipper from "./useVidChipper";
 
-export default () => {
+export default ({ variant }) => {
   const {
     inputVideoBlobUrl,
     isFFmpegLoaded,
@@ -24,7 +24,11 @@ export default () => {
 
       <input type="file" onChange={videoFileUploaded} />
 
-      <EqualSegmentChipper />
+      {variant === "singlePart" && <SinglePartChipper />}
+
+      {variant === "equalSegment" && <EqualSegmentChipper />}
+
+      {variant === "formatConverter" && <FormatConverter />}
     </>
   ) : (
     <div>Loading ffmpeg-core</div>

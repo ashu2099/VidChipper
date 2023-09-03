@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 
-import { getFromCommonStore } from "../../utils/commonStore";
+import { getFromCommonStore, getNewProcessId } from "../../utils/commonStore";
 
 import {
   calculateEncodingProgress,
@@ -35,7 +35,7 @@ export default () => {
   }, []);
 
   const splitVideoIntoPart = useCallback(
-    async (startTimeStamp, endTimeStamp, outputFileName) => {
+    async (startTimeStamp, endTimeStamp) => {
       const requestedDurationError = validateSplitDuration(
         startTimeStamp,
         endTimeStamp
@@ -53,11 +53,13 @@ export default () => {
       setIsVideoSplitting(true);
       setSplitProgress("Splitting Video");
 
+      const processId = getNewProcessId();
+
       const params = generateParamsForSingleSplit(
         fileExtension,
         startTimeStamp,
         endTimeStamp,
-        outputFileName
+        processId
       );
 
       console.log(params);
@@ -66,7 +68,7 @@ export default () => {
 
       if (processingResponse === 0) {
         const data = await ffmpegRef.current.readFile(
-          `${outputFileName}.${fileExtension}`
+          `${processId}.${fileExtension}`
         );
 
         const resultUrl = URL.createObjectURL(

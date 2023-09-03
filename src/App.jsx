@@ -1,8 +1,8 @@
 import "./App.css";
-import VidChipper from "./components/VidChipper/VidChipper";
+import ChipperParent from "./components/ChipperParent";
 
 function App() {
-  return <VidChipper />;
+  return <ChipperParent />;
 }
 
 export default App;

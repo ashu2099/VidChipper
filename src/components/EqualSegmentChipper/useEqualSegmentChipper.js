@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 
-import { getFromCommonStore } from "../../utils/commonStore";
+import { getFromCommonStore, getNewProcessId } from "../../utils/commonStore";
 import { pubSub, pubSubEvents } from "../../utils/pubSub";
 import { generateParamsForEqualSplit } from "../../utils/ffmpegParamUtils";
 import {
@@ -40,7 +40,13 @@ export default () => {
     setIsVideoSplitting(true);
     setSplitProgress("Splitting Video");
 
-    const params = generateParamsForEqualSplit(fileExtension, duration);
+    const processId = getNewProcessId();
+
+    const params = generateParamsForEqualSplit(
+      fileExtension,
+      duration,
+      processId
+    );
 
     const processingResponse = await ffmpegRef.current.exec(params);
 
@@ -53,7 +59,9 @@ export default () => {
 
       setSplitVideoResults(
         directoryContents
-          ?.filter?.((dirContent) => dirContent.name.startsWith("output-"))
+          ?.filter?.((dirContent) =>
+            dirContent.name.startsWith(`output-${processId}-`)
+          )
           ?.map((x) => x.name)
       );
     }

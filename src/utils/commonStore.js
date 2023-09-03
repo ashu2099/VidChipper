@@ -9,3 +9,11 @@ export const setInCommonStore = (key, value) => {
     window.commonStore = commonStore;
   }
 };
+
+export const getNewProcessId = () => {
+  const newProcessId = new Date().getTime();
+
+  setInCommonStore("currentProcessId", newProcessId);
+
+  return newProcessId;
+};

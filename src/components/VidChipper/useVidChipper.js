@@ -67,7 +67,13 @@ export default () => {
   );
 
   useEffect(() => {
+    const localffmpefRef = ffmpegRef.current;
+
     loadFFmpegFiles();
+
+    return () => {
+      localffmpefRef?.current?.terminate();
+    };
   }, []);
 
   return {
