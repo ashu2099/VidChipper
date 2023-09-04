@@ -15,9 +15,12 @@ export default () => {
     downloadSplitPart,
   } = useEqualSegmentChipper();
   return (
-    <div id="equalSegmentChipper" className="flex flex-col py-2">
+    <div
+      id="equalSegmentChipper"
+      className="flex flex-col pt-2 text-center md:text-left"
+    >
       <div className="mb-2">
-        <label className="flex text-white mb-1">
+        <label className="flex flex-col text-white mb-1">
           Enter Interval Duration, in Seconds:
         </label>
 
@@ -34,7 +37,7 @@ export default () => {
         )}
       </div>
 
-      <div className="mt-2 mb-2">
+      <div className="mt-2">
         {splitProgress && (
           <div className="text-pink-200 mb-1 italic">{splitProgress}</div>
         )}

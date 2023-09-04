@@ -22,8 +22,8 @@ export default () => {
       {!isFFmpegLoaded && <div>Loading ffmpeg-core</div>}
 
       {isFFmpegLoaded && (
-        <div id="vidChipper" className="flex mt-8">
-          <div className="flex flex-1 flex-col px-3">
+        <div id="vidChipper" className="flex flex-col mt-8 md:flex-row">
+          <div className="flex flex-1 flex-col items-center justify-center">
             <video
               ref={inputVideoRef}
               className={inputVideoBlobUrl ? "" : "hidden"}
@@ -35,15 +35,10 @@ export default () => {
             <input className="mt-2" type="file" onChange={videoFileUploaded} />
           </div>
 
-          <div className="flex bg-white w-[1px]"></div>
+          <div className="flex bg-white w-full md:w-[1px] h-[1px] md:h-auto mx-0 md:mx-3 my-3 md:my-0"></div>
 
-          <div className="flex flex-1 px-3">
-            <Tab.Group
-              defaultIndex={2}
-              manual
-              as="div"
-              className="flex flex-col flex-1"
-            >
+          <div className="flex flex-1">
+            <Tab.Group manual as="div" className="flex flex-col flex-1">
               <Tab.List className="flex bg-black/[0.2]">
                 <Tab className={tabClassName}>Clip</Tab>
                 <Tab className={tabClassName}>Split</Tab>

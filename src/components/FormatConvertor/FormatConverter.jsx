@@ -16,7 +16,10 @@ export default () => {
   } = useFormatConverter();
 
   return (
-    <div id="formatConverter" className="flex flex-col py-2">
+    <div
+      id="formatConverter"
+      className="flex flex-col pt-2 text-center md:text-left"
+    >
       <div className="mb-2">
         <label className="flex flex-col text-white mb-2">
           <div>Enter output filename, with desired format extension</div>
@@ -36,7 +39,7 @@ export default () => {
         )}
       </div>
 
-      <div className="mt-2 mb-2">
+      <div className="mt-2">
         {convertProgress && (
           <div className="text-pink-200 mb-1 italic">{convertProgress}</div>
         )}

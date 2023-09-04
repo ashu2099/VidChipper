@@ -101,6 +101,10 @@ export default () => {
   }, []);
 
   useEffect(() => {
+    if (getFromCommonStore("videoBlob") !== undefined) {
+      setIsVideoFileUploaded(true);
+    }
+
     pubSub.subscribe(pubSubEvents.videoFileUploaded, () => {
       setIsVideoFileUploaded(true);
       setConvertedVideoDownloadUrl(null);

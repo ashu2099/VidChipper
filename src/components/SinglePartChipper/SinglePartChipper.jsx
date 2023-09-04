@@ -17,9 +17,12 @@ export default () => {
     clippedVideoDownloadUrl,
   } = useVideoPart();
   return (
-    <div id="singlePartChipper" className="flex flex-col py-2">
+    <div
+      id="singlePartChipper"
+      className="flex flex-col pt-2 text-center md:text-left"
+    >
       <div className="mb-2">
-        <label className="flex text-white mb-1">
+        <label className="flex flex-col text-white mb-1">
           Enter Starting Timestamp (hh:mm:ss):
         </label>
 
@@ -36,7 +39,7 @@ export default () => {
       </div>
 
       <div className="mb-2">
-        <label className="flex text-white mb-1">
+        <label className="flex flex-col text-white mb-1">
           Enter Ending Timestamp (hh:mm:ss):
         </label>
 
@@ -50,7 +53,7 @@ export default () => {
         {endError && <p className="text-pink-200 mt-1 italic">{endError}</p>}
       </div>
 
-      <div className="mt-2 mb-2">
+      <div className="mt-2">
         {clipProgress && (
           <div className="text-pink-200 mb-1 italic">{clipProgress}</div>
         )}
