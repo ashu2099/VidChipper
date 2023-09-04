@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite -- IS_DEV",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
@@ -13,6 +13,8 @@
     "@ffmpeg/core": "^0.12.2",
     "@ffmpeg/ffmpeg": "^0.12.5",
     "@ffmpeg/util": "^0.12.0",
+    "@headlessui/react": "^1.7.17",
+    "@headlessui/tailwindcss": "^0.2.0",
     "@vitejs/plugin-react": "^4.0.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

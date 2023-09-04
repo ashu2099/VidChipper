@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  font-family: "Lato", sans-serif;
+}
+
+#vidChipperContainer {
+  background: linear-gradient(225deg, #f90468 0%, #f90468 50%, #ad2099 100%);
+  background-color: #ee0979;
+}

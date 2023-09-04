@@ -1,6 +1,10 @@
 import { useState, useCallback, useEffect } from "react";
 
-import { getFromCommonStore, getNewProcessId } from "../../utils/commonStore";
+import {
+  getFromCommonStore,
+  getNewProcessId,
+  setInCommonStore,
+} from "../../utils/commonStore";
 import { pubSub, pubSubEvents } from "../../utils/pubSub";
 import { generateParamsForFormatConversion } from "../../utils/ffmpegParamUtils";
 import {
@@ -14,7 +18,7 @@ export default () => {
   const [outputFilename, setOutputFilename] = useState("output.mp4");
   const [outputFilenameError, setOutputFilenameError] = useState(null);
 
-  const [convertProgress, setConvertProgress] = useState("Split Video");
+  const [convertProgress, setConvertProgress] = useState(null);
 
   const [isVideoConverting, setIsVideoConverting] = useState(false);
 
@@ -28,11 +32,12 @@ export default () => {
 
   const convertVideoToRequiredFormat = useCallback(async (outputName) => {
     const ffmpegRef = getFromCommonStore("ffmpegRef");
-
     const inputFileExtension = getFromCommonStore("videoFileExtension");
+    setInCommonStore("nameOfLatestConvert", outputName);
 
     setIsVideoConverting(true);
     setConvertProgress("Splitting Video");
+    setConvertedVideoDownloadUrl(null);
 
     const processId = getNewProcessId();
 
@@ -44,30 +49,45 @@ export default () => {
 
     console.log(params);
 
-    const processingResponse = await ffmpegRef.current.exec(params);
+    try {
+      const processingResponse = await ffmpegRef.current.exec(params);
 
-    if (processingResponse === 0) {
-      const data = await ffmpegRef.current.readFile(params[2]);
+      if (processingResponse === 0) {
+        const data = await ffmpegRef.current.readFile(params[2]);
 
-      const resultUrl = URL.createObjectURL(
-        new Blob([data.buffer], {
-          type: getFromCommonStore("videoFileMimeType"),
-        })
-      );
+        const resultUrl = URL.createObjectURL(
+          new Blob([data.buffer], {
+            type: getFromCommonStore("videoFileMimeType"),
+          })
+        );
 
-      setConvertedVideoDownloadUrl(resultUrl);
-    } else {
-      setOutputFilenameError(
-        "An Error Occurred. Please change output name and try again."
-      );
+        setConvertedVideoDownloadUrl(resultUrl);
+
+        setConvertProgress(null);
+      } else {
+        throw processingResponse;
+      }
+    } catch (e) {
+      setConvertProgress("Converting Failed. Please try again.");
+      throw e;
+    } finally {
+      setIsVideoConverting(false);
     }
-
-    setConvertProgress("Split Video");
-    setIsVideoConverting(false);
   }, []);
 
   const downloadConvertedOutput = useCallback(() => {
     window.open(convertedVideoDownloadUrl, "_blank");
+
+    const anchor = document.createElement("a");
+    anchor.style.display = "none";
+    document.body.appendChild(anchor);
+
+    anchor.href = convertedVideoDownloadUrl;
+    anchor.setAttribute("download", getFromCommonStore("nameOfLatestConvert"));
+
+    anchor.click();
+
+    document.body.removeChild(anchor);
   }, [convertedVideoDownloadUrl]);
 
   const updateConvertProgress = useCallback(({ message }) => {

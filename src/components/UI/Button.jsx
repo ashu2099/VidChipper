@@ -3,10 +3,10 @@ export default ({ label, isLoading, isDisabled, onClick, extendClass }) => {
     <button
       key={label}
       onClick={onClick}
-      className={`bg-pink-500 text-white p-2 rounded ${
+      className={`bg-fuchsia-700 text-white p-2 rounded ${
         isLoading || isDisabled
-          ? "bg-pink-900 cursor-not-allowed"
-          : "hover:bg-pink-600"
+          ? "bg-fuchsia-950 cursor-not-allowed"
+          : "hover:bg-fuchsia-800"
       } ${extendClass}`}
       disabled={isDisabled || isLoading}
     >

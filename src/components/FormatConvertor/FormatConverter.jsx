@@ -16,48 +16,54 @@ export default () => {
   } = useFormatConverter();
 
   return (
-    <>
-      <div className="mb-4">
-        <label className="block text-gray-600 my-1">
-          <span> Enter output filename, with desired format extension</span>
-          <br />
-          <span>(Eg: output.mp4/output.m4a)</span>
+    <div id="formatConverter" className="flex flex-col py-2">
+      <div className="mb-2">
+        <label className="flex flex-col text-white mb-2">
+          <div>Enter output filename, with desired format extension</div>
+          <div className="text-sm">(Eg: output.mp4/output.webm)</div>
         </label>
+
         <input
           type="text"
           value={outputFilename}
           onChange={updateOutputFilename}
-          className="border border-gray-300 px-2 py-1 rounded-md w-32"
+          className="px-2 py-1 w-32 text-gray-600 rounded-md"
           disabled={isVideoConverting}
         />
+
         {outputFilenameError && (
-          <p className="text-red-600 mt-1">{outputFilenameError}</p>
+          <p className="text-pink-200 mt-1 italic">{outputFilenameError}</p>
         )}
       </div>
 
-      <Button
-        extendClass="mt-1"
-        onClick={() => {
-          convertVideoToRequiredFormat(outputFilename);
-        }}
-        isLoading={isVideoConverting}
-        isDisabled={!isVideoFileUploaded || outputFilenameError}
-        label={convertProgress}
-      />
+      <div className="mt-2 mb-2">
+        {convertProgress && (
+          <div className="text-pink-200 mb-1 italic">{convertProgress}</div>
+        )}
 
-      <br />
-
-      {convertedVideoDownloadUrl && (
         <Button
-          label={"Download Split Video"}
-          extendClass="mt-1"
           onClick={() => {
-            downloadConvertedOutput();
+            convertVideoToRequiredFormat(outputFilename);
           }}
           isLoading={isVideoConverting}
-          isDisabled={isVideoConverting}
+          isDisabled={!isVideoFileUploaded || outputFilenameError}
+          label="Convert Video"
         />
+      </div>
+
+      {convertedVideoDownloadUrl && (
+        <div className="">
+          <Button
+            label={"Download Converted Video"}
+            extendClass="mt-1"
+            onClick={() => {
+              downloadConvertedOutput();
+            }}
+            isLoading={isVideoConverting}
+            isDisabled={isVideoConverting}
+          />
+        </div>
       )}
-    </>
+    </div>
   );
 };

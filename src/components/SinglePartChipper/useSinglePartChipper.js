@@ -19,10 +19,10 @@ export default () => {
   const [startError, setStartError] = useState(null);
   const [endError, setEndError] = useState(null);
 
-  const [splitProgress, setSplitProgress] = useState("Split Video");
+  const [clipProgress, setSplitProgress] = useState(null);
 
-  const [isVideoSplitting, setIsVideoSplitting] = useState(false);
-  const [splitVideoDownloadUrl, setSplitVideoDownloadUrl] = useState(null);
+  const [isVideoClipping, setIsVideoClipping] = useState(false);
+  const [clippedVideoDownloadUrl, setClippedVideoDownloadUrl] = useState(null);
 
   const updateTimeStamp = useCallback((isStartingTimestamp, value) => {
     if (isStartingTimestamp) {
@@ -34,36 +34,36 @@ export default () => {
     }
   }, []);
 
-  const splitVideoIntoPart = useCallback(
-    async (startTimeStamp, endTimeStamp) => {
-      const requestedDurationError = validateSplitDuration(
-        startTimeStamp,
-        endTimeStamp
-      );
+  const clipVideo = useCallback(async (startTimeStamp, endTimeStamp) => {
+    const requestedDurationError = validateSplitDuration(
+      startTimeStamp,
+      endTimeStamp
+    );
 
-      if (requestedDurationError) {
-        setEndError(requestedDurationError);
-        return;
-      }
+    if (requestedDurationError) {
+      setEndError(requestedDurationError);
+      return;
+    }
 
-      const ffmpegRef = getFromCommonStore("ffmpegRef");
+    const ffmpegRef = getFromCommonStore("ffmpegRef");
+    const fileExtension = getFromCommonStore("videoFileExtension");
 
-      const fileExtension = getFromCommonStore("videoFileExtension");
+    setIsVideoClipping(true);
+    setSplitProgress("Clipping Video");
+    setClippedVideoDownloadUrl(null);
 
-      setIsVideoSplitting(true);
-      setSplitProgress("Splitting Video");
+    const processId = getNewProcessId();
 
-      const processId = getNewProcessId();
+    const params = generateParamsForSingleSplit(
+      fileExtension,
+      startTimeStamp,
+      endTimeStamp,
+      processId
+    );
 
-      const params = generateParamsForSingleSplit(
-        fileExtension,
-        startTimeStamp,
-        endTimeStamp,
-        processId
-      );
+    console.log(params);
 
-      console.log(params);
-
+    try {
       const processingResponse = await ffmpegRef.current.exec(params);
 
       if (processingResponse === 0) {
@@ -77,18 +77,22 @@ export default () => {
           })
         );
 
-        setSplitVideoDownloadUrl(resultUrl);
+        setClippedVideoDownloadUrl(resultUrl);
+
+        setSplitProgress(null);
+      } else {
+        throw processingResponse;
       }
+    } catch (e) {
+      setSplitProgress("An Unexpected Error Occurred, Please try Again.");
+    } finally {
+      setIsVideoClipping(false);
+    }
+  }, []);
 
-      setSplitProgress("Split Video");
-      setIsVideoSplitting(false);
-    },
-    []
-  );
-
-  const downloadSplitPart = useCallback(() => {
-    window.open(splitVideoDownloadUrl, "_blank");
-  }, [splitVideoDownloadUrl]);
+  const downloadClippedPart = useCallback(() => {
+    window.open(clippedVideoDownloadUrl, "_blank");
+  }, [clippedVideoDownloadUrl]);
 
   const updateSplitProgress = useCallback(
     ({ message }) => {
@@ -101,7 +105,7 @@ export default () => {
       );
 
       if (progress && progress < 100) {
-        setSplitProgress(`Splitting: ${progress.toFixed(2)} %`);
+        setSplitProgress(`Clipping: ${progress.toFixed(2)} %`);
       }
     },
     [endTimestamp, startTimestamp]
@@ -110,7 +114,7 @@ export default () => {
   useEffect(() => {
     pubSub.subscribe(pubSubEvents.videoFileUploaded, () => {
       setIsVideoFileUploaded(true);
-      setSplitVideoDownloadUrl(null);
+      setClippedVideoDownloadUrl(null);
     });
   }, []);
 
@@ -131,10 +135,10 @@ export default () => {
     startError,
     endError,
     updateTimeStamp,
-    splitVideoIntoPart,
-    downloadSplitPart,
-    isVideoSplitting,
-    splitProgress,
-    splitVideoDownloadUrl,
+    clipVideo,
+    downloadClippedPart,
+    isVideoClipping,
+    clipProgress,
+    clippedVideoDownloadUrl,
   };
 };

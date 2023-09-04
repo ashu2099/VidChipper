@@ -15,34 +15,39 @@ export default () => {
     downloadSplitPart,
   } = useEqualSegmentChipper();
   return (
-    <>
-      <div className="mb-4">
-        <label className="block text-gray-600">
+    <div id="equalSegmentChipper" className="flex flex-col py-2">
+      <div className="mb-2">
+        <label className="flex text-white mb-1">
           Enter Interval Duration, in Seconds:
         </label>
+
         <input
           type="text"
           value={segmentDuration}
           onChange={updateSegmentDuration}
-          className="border border-gray-300 px-2 py-1 rounded-md w-32"
+          className="px-2 py-1 w-32 text-gray-600 rounded-md"
           disabled={isVideoSplitting}
         />
+
         {segmenDurationError && (
-          <p className="text-red-600 mt-1">{segmenDurationError}</p>
+          <p className="text-pink-200 mt-1 italic">{segmenDurationError}</p>
         )}
       </div>
 
-      <Button
-        extendClass="mt-1"
-        onClick={() => {
-          splitVideoInEqualParts(segmentDuration);
-        }}
-        isLoading={isVideoSplitting}
-        isDisabled={!isVideoFileUploaded || segmenDurationError}
-        label={splitProgress}
-      />
+      <div className="mt-2 mb-2">
+        {splitProgress && (
+          <div className="text-pink-200 mb-1 italic">{splitProgress}</div>
+        )}
 
-      <br />
+        <Button
+          onClick={() => {
+            splitVideoInEqualParts(segmentDuration);
+          }}
+          isLoading={isVideoSplitting}
+          isDisabled={!isVideoFileUploaded || segmenDurationError}
+          label="Split Video"
+        />
+      </div>
 
       {splitVideoResults?.length > 0 &&
         splitVideoResults.map((segmentName, index) => (
@@ -55,6 +60,6 @@ export default () => {
             }}
           />
         ))}
-    </>
+    </div>
   );
 };

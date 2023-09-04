@@ -14,7 +14,7 @@ export default () => {
   const [segmentDuration, setSegmentDuration] = useState(1);
   const [segmenDurationError, setSegmenDurationError] = useState(null);
 
-  const [splitProgress, setSplitProgress] = useState("Split Video");
+  const [splitProgress, setSplitProgress] = useState(null);
 
   const [isVideoSplitting, setIsVideoSplitting] = useState(false);
   const [splitVideoResults, setSplitVideoResults] = useState([]);
@@ -33,6 +33,8 @@ export default () => {
       return;
     }
 
+    setSplitProgress(null);
+
     const ffmpegRef = getFromCommonStore("ffmpegRef");
 
     const fileExtension = getFromCommonStore("videoFileExtension");
@@ -48,26 +50,31 @@ export default () => {
       processId
     );
 
-    const processingResponse = await ffmpegRef.current.exec(params);
+    try {
+      const processingResponse = await ffmpegRef.current.exec(params);
 
-    if (processingResponse !== 0) {
-      console.log("\n\n\n\nPROCESSING FAILED\n\n\n\n");
-    } else {
-      const directoryContents = await ffmpegRef.current.listDir("/");
+      if (processingResponse === 0) {
+        const directoryContents = await ffmpegRef.current.listDir("/");
 
-      console.log(directoryContents);
+        console.log(directoryContents);
 
-      setSplitVideoResults(
-        directoryContents
-          ?.filter?.((dirContent) =>
-            dirContent.name.startsWith(`output-${processId}-`)
-          )
-          ?.map((x) => x.name)
-      );
+        setSplitVideoResults(
+          directoryContents
+            ?.filter?.((dirContent) =>
+              dirContent.name.startsWith(`output-${processId}-`)
+            )
+            ?.map((x) => x.name)
+        );
+
+        setSplitProgress(null);
+      } else {
+        throw processingResponse;
+      }
+    } catch (e) {
+      setSplitProgress("Splitting Failed. Please try again");
+    } finally {
+      setIsVideoSplitting(false);
     }
-
-    setSplitProgress("Split Video");
-    setIsVideoSplitting(false);
   }, []);
 
   const downloadSplitPart = useCallback(async (segmentName) => {
