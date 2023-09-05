@@ -14,7 +14,7 @@ export default () => {
   const [inputVideoBlobUrl, setInputVideoBlobUrl] = useState(null);
 
   const loadFFmpegFiles = async () => {
-    const baseURL = `${window.location.origin}`;
+    const baseURL = `${window.location.href}`;
 
     setInCommonStore("ffmpegRef", ffmpegRef);
 

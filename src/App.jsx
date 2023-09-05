@@ -21,7 +21,7 @@ function App() {
         <span>Made with</span>
 
         <div className="flex mx-1 items-center w-4">
-          <img src="/heart.png" alt="" className="flex w-full" />
+          <img src="./heart.png" alt="" className="flex w-full" />
         </div>
 
         <span>by&nbsp;</span>
