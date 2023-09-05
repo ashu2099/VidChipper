@@ -1,6 +1,10 @@
 import { useState, useCallback, useEffect } from "react";
 
-import { getFromCommonStore, getNewProcessId } from "../../utils/commonStore";
+import {
+  getFromCommonStore,
+  getNewProcessId,
+  triggerDownloadDialogue,
+} from "../../utils/commonStore";
 import { pubSub, pubSubEvents } from "../../utils/pubSub";
 import { generateParamsForEqualSplit } from "../../utils/ffmpegParamUtils";
 import {
@@ -89,6 +93,8 @@ export default () => {
     );
 
     window.open(resultUrl, "_blank");
+
+    triggerDownloadDialogue(resultUrl, segmentName);
   }, []);
 
   const updateSplitProgress = useCallback(({ message }) => {

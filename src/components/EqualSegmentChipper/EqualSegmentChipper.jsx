@@ -56,7 +56,7 @@ export default () => {
         splitVideoResults.map((segmentName, index) => (
           <Button
             key={segmentName}
-            label={`Download part ${index}`}
+            label={`Download part ${index + 1}`}
             extendClass="mt-1 mr-1"
             onClick={() => {
               downloadSplitPart(segmentName);

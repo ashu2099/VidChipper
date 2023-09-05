@@ -4,6 +4,7 @@ import {
   getFromCommonStore,
   getNewProcessId,
   setInCommonStore,
+  triggerDownloadDialogue,
 } from "../../utils/commonStore";
 import { pubSub, pubSubEvents } from "../../utils/pubSub";
 import { generateParamsForFormatConversion } from "../../utils/ffmpegParamUtils";
@@ -55,11 +56,7 @@ export default () => {
       if (processingResponse === 0) {
         const data = await ffmpegRef.current.readFile(params[2]);
 
-        const resultUrl = URL.createObjectURL(
-          new Blob([data.buffer], {
-            type: getFromCommonStore("videoFileMimeType"),
-          })
-        );
+        const resultUrl = URL.createObjectURL(new Blob([data.buffer]));
 
         setConvertedVideoDownloadUrl(resultUrl);
 
@@ -76,18 +73,10 @@ export default () => {
   }, []);
 
   const downloadConvertedOutput = useCallback(() => {
-    window.open(convertedVideoDownloadUrl, "_blank");
-
-    const anchor = document.createElement("a");
-    anchor.style.display = "none";
-    document.body.appendChild(anchor);
-
-    anchor.href = convertedVideoDownloadUrl;
-    anchor.setAttribute("download", getFromCommonStore("nameOfLatestConvert"));
-
-    anchor.click();
-
-    document.body.removeChild(anchor);
+    triggerDownloadDialogue(
+      convertedVideoDownloadUrl,
+      getFromCommonStore("nameOfLatestConvert")
+    );
   }, [convertedVideoDownloadUrl]);
 
   const updateConvertProgress = useCallback(({ message }) => {

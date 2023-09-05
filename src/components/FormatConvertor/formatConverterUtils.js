@@ -4,7 +4,7 @@ import { timestampToSeconds } from "../SinglePartChipper/singleChipperUtils";
 export const validateOutputFilename = (outputname) => {
   const converSionErrors = ["Output File Name is not proper"];
 
-  const outputPattern = /^.+\.([A-z0-9]+)$/;
+  const outputPattern = /^[^.]+\.[A-z0-9]+$/;
 
   if (!outputPattern.test(outputname)) {
     return converSionErrors[0];

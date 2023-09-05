@@ -17,3 +17,16 @@ export const getNewProcessId = () => {
 
   return newProcessId;
 };
+
+export const triggerDownloadDialogue = (downloadUrl, fileName) => {
+  const anchor = document.createElement("a");
+  anchor.style.display = "none";
+  document.body.appendChild(anchor);
+
+  anchor.href = downloadUrl;
+  anchor.setAttribute("download", fileName);
+
+  anchor.click();
+
+  document.body.removeChild(anchor);
+};
