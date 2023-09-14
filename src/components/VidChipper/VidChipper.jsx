@@ -15,11 +15,12 @@ export default () => {
     isFFmpegLoaded,
     inputVideoRef,
     videoFileUploaded,
+    ffmpegLoadProgressMsg,
   } = useVidChipper();
 
   return (
     <>
-      {!isFFmpegLoaded && <div>Loading ffmpeg-core</div>}
+      {!isFFmpegLoaded && <div>{ffmpegLoadProgressMsg}</div>}
 
       {isFFmpegLoaded && (
         <div id="vidChipper" className="flex flex-col mt-8 md:flex-row">

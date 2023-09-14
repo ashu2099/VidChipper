@@ -1,30 +1,64 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 
 import { FFmpeg } from "@ffmpeg/ffmpeg";
-import { fetchFile } from "@ffmpeg/util";
+import { fetchFile, toBlobURL } from "@ffmpeg/util";
 
 import { getFromCommonStore, setInCommonStore } from "../../utils/commonStore";
 import { pubSub, pubSubEvents } from "../../utils/pubSub";
+import {
+  aquireWakeLock,
+  reaquireWakeLock,
+  releaseWakeLock,
+} from "../../utils/wakeLockUtils";
+import {
+  DEFAULT_WASM_LOAD_MSG,
+  generateWasmProgressMessage,
+} from "./vidChipperUtils";
 
 export default () => {
   const ffmpegRef = useRef(new FFmpeg());
   const inputVideoRef = useRef(null);
 
   const [isFFmpegLoaded, setIsFFmpegLoaded] = useState(false);
+
+  const [ffmpegLoadProgressMsg, setFFmpegLoadProgressMsg] = useState(
+    DEFAULT_WASM_LOAD_MSG
+  );
+
   const [inputVideoBlobUrl, setInputVideoBlobUrl] = useState(null);
 
-  const loadFFmpegFiles = async () => {
-    const baseURL = `${window.location.href}`;
+  const updateWasmLoadProgress = useCallback((progressEvent) => {
+    setFFmpegLoadProgressMsg(() => generateWasmProgressMessage(progressEvent));
+  }, []);
 
-    setInCommonStore("ffmpegRef", ffmpegRef);
+  const loadFFmpegFiles = useCallback(async () => {
+    try {
+      const baseURL = `${window.location.href}`;
 
-    await ffmpegRef.current.load({
-      coreURL: `${baseURL}/ffmpeg-core.js`,
-      wasmURL: `${baseURL}/ffmpeg-core.wasm`,
-    });
+      setInCommonStore("ffmpegRef", ffmpegRef);
 
-    setIsFFmpegLoaded(true);
-  };
+      await aquireWakeLock();
+
+      const ffmpegLoadResult = await ffmpegRef.current.load({
+        coreURL: await toBlobURL(
+          `${baseURL}/ffmpeg-core.js`,
+          "text/javascript"
+        ),
+        wasmURL: await toBlobURL(
+          `${baseURL}/ffmpeg-core.wasm`,
+          "application/wasm",
+          true,
+          updateWasmLoadProgress
+        ),
+      });
+
+      await releaseWakeLock();
+
+      setIsFFmpegLoaded(ffmpegLoadResult);
+    } catch (e) {
+      console.log(e);
+    }
+  }, [updateWasmLoadProgress]);
 
   const writeFileToFFmpegStore = useCallback(async () => {
     await ffmpegRef.current.writeFile(
@@ -69,17 +103,22 @@ export default () => {
   useEffect(() => {
     const localffmpefRef = ffmpegRef.current;
 
+    document.addEventListener("visibilitychange", reaquireWakeLock);
+
     loadFFmpegFiles();
 
     return () => {
+      document.removeEventListener("visibilitychange", reaquireWakeLock);
+
       localffmpefRef?.current?.terminate();
     };
-  }, []);
+  }, [loadFFmpegFiles]);
 
   return {
     inputVideoBlobUrl,
     isFFmpegLoaded,
     inputVideoRef,
     videoFileUploaded,
+    ffmpegLoadProgressMsg,
   };
 };
