@@ -16,6 +16,7 @@ export default () => {
     inputVideoRef,
     videoFileUploaded,
     ffmpegLoadProgressMsg,
+    openFileBrowser,
   } = useVidChipper();
 
   return (
@@ -33,10 +34,33 @@ export default () => {
               src={inputVideoBlobUrl}
             ></video>
 
-            <input className="mt-2" type="file" onChange={videoFileUploaded} />
+            <input
+              id="fileUploadInputElement"
+              className="hidden"
+              type="file"
+              onChange={videoFileUploaded}
+            />
+
+            <div
+              className={[
+                "border border-pink-300 hover:border-white border-dashed",
+                "flex flex-1 w-full items-center justify-center",
+                "py-8 select-none cursor-pointer",
+                "text-pink-300 hover:text-white",
+                `${inputVideoBlobUrl ? "hidden" : ""}`,
+              ].join(" ")}
+              onClick={openFileBrowser}
+            >
+              <div className="text-xl">Click Here To Select Video !</div>
+            </div>
           </div>
 
-          <div className="flex bg-white w-full md:w-[1px] h-[1px] md:h-auto mx-0 md:mx-3 my-3 md:my-0"></div>
+          <div
+            className={[
+              "flex bg-white w-full md:w-[1px] h-[1px]",
+              "md:h-auto mx-0 md:mx-4 my-4 md:my-0",
+            ].join(" ")}
+          ></div>
 
           <div className="flex flex-1">
             <Tab.Group manual as="div" className="flex flex-col flex-1">

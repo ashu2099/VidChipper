@@ -14,6 +14,7 @@ import {
   DEFAULT_WASM_LOAD_MSG,
   generateWasmProgressMessage,
 } from "./vidChipperUtils";
+import { toBlobURLOverridden } from "../../utils/ffmpegUtilOverrides";
 
 export default () => {
   const ffmpegRef = useRef(new FFmpeg());
@@ -41,7 +42,7 @@ export default () => {
 
       const ffmpegLoadResult = await ffmpegRef.current.load({
         coreURL: await toBlobURL(`${baseURL}ffmpeg-core.js`, "text/javascript"),
-        wasmURL: await toBlobURL(
+        wasmURL: await toBlobURLOverridden(
           `${baseURL}ffmpeg-core.wasm`,
           "application/wasm",
           true,
@@ -97,6 +98,12 @@ export default () => {
     [writeFileToFFmpegStore]
   );
 
+  const openFileBrowser = useCallback(() => {
+    const inputElement = document.getElementById("fileUploadInputElement");
+
+    inputElement?.click?.();
+  }, []);
+
   useEffect(() => {
     const localffmpefRef = ffmpegRef.current;
 
@@ -117,5 +124,6 @@ export default () => {
     inputVideoRef,
     videoFileUploaded,
     ffmpegLoadProgressMsg,
+    openFileBrowser,
   };
 };

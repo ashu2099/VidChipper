@@ -6,7 +6,14 @@ function App() {
       id="vidChipperContainer"
       className="flex flex-1 flex-col w-full h-full text-white p-4"
     >
-      <div className="text-5xl font-[400] mb-4">Welcome to VidChipper!</div>
+      <div className="flex flex-col sm:flex-row items-center mb-5">
+        <img className="flex w-32 mb-2" src="./VidChipperLogo2.png" alt="" />
+
+        <div className="text-5xl font-[400] text-center sm:text-left">
+          <span className="hidden sm:inline-flex">Welcome to&nbsp;</span>
+          <span>VidChipper!</span>
+        </div>
+      </div>
 
       <div className="text-3xl font-[300] mb-4">
         Clip, Convert, or Split your video into equal length parts, right in
@@ -30,14 +37,6 @@ function App() {
           Ashutosh Dwivedi
         </a>
       </div>
-
-      {/* <div className="text-center mt-1">
-        <span>With inspiration from&nbsp;</span>
-        <a href="https://github.com/jeromewu" className="hover:underline">
-          @jeromewu
-        </a>
-        <span>, Author of ffmpeg.wasm</span>
-      </div> */}
     </div>
   );
 }
