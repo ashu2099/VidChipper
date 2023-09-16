@@ -40,12 +40,9 @@ export default () => {
       await aquireWakeLock();
 
       const ffmpegLoadResult = await ffmpegRef.current.load({
-        coreURL: await toBlobURL(
-          `${baseURL}/ffmpeg-core.js`,
-          "text/javascript"
-        ),
+        coreURL: await toBlobURL(`${baseURL}ffmpeg-core.js`, "text/javascript"),
         wasmURL: await toBlobURL(
-          `${baseURL}/ffmpeg-core.wasm`,
+          `${baseURL}ffmpeg-core.wasm`,
           "application/wasm",
           true,
           updateWasmLoadProgress
