@@ -3,6 +3,7 @@ const eventStore = {};
 export const pubSubEvents = {
   ffMpegLoaded: "ffMpegLoaded",
   videoFileUploaded: "videoFileUploaded",
+  processLogUpdated: "processLogUpdated",
 };
 
 export const pubSub = {

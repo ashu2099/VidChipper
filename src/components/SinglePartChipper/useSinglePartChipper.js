@@ -96,7 +96,7 @@ export default () => {
 
   const updateSplitProgress = useCallback(
     ({ message }) => {
-      console.log(message);
+      pubSub.publish(pubSubEvents.processLogUpdated, message);
 
       const progress = calculateEncodingProgress(
         message,

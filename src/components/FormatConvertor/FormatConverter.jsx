@@ -23,7 +23,7 @@ export default () => {
       <div className="mb-2">
         <label className="flex flex-col text-white mb-2">
           <div>Enter output filename, with desired format extension</div>
-          <div className="text-sm">(Eg: output.mp4/output.webm)</div>
+          <div className="text-sm">(Eg: output.mp4 / vid.mov / meme.gif)</div>
         </label>
 
         <input
@@ -35,13 +35,13 @@ export default () => {
         />
 
         {outputFilenameError && (
-          <p className="text-pink-200 mt-1 italic">{outputFilenameError}</p>
+          <p className="text-pink-200 mt-2 italic">{outputFilenameError}</p>
         )}
       </div>
 
-      <div className="mt-2">
+      <div className="">
         {convertProgress && (
-          <div className="text-pink-200 mb-1 italic">{convertProgress}</div>
+          <div className="text-pink-200 mb-2 italic">{convertProgress}</div>
         )}
 
         <Button
@@ -58,7 +58,7 @@ export default () => {
         <div className="">
           <Button
             label={"Download Converted Video"}
-            extendClass="mt-1"
+            extendClass="mt-2"
             onClick={() => {
               downloadConvertedOutput();
             }}

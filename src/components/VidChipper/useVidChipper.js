@@ -26,6 +26,8 @@ export default () => {
     DEFAULT_WASM_LOAD_MSG
   );
 
+  const [processLog, setProcessLog] = useState("");
+
   const [inputVideoBlobUrl, setInputVideoBlobUrl] = useState(null);
 
   const updateWasmLoadProgress = useCallback((progressEvent) => {
@@ -118,6 +120,17 @@ export default () => {
     };
   }, [loadFFmpegFiles]);
 
+  useEffect(() => {
+    pubSub.subscribe(pubSubEvents.processLogUpdated, (logmsg) => {
+      setProcessLog(logmsg === "Aborted()" ? "" : logmsg);
+    });
+
+    () => {
+      // lol this will unsubscribe all other listeners too.
+      pubSub.unsubscribe(pubSubEvents.processLogUpdated, () => {});
+    };
+  }, []);
+
   return {
     inputVideoBlobUrl,
     isFFmpegLoaded,
@@ -125,5 +138,6 @@ export default () => {
     videoFileUploaded,
     ffmpegLoadProgressMsg,
     openFileBrowser,
+    processLog,
   };
 };

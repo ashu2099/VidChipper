@@ -80,7 +80,7 @@ export default () => {
   }, [convertedVideoDownloadUrl]);
 
   const updateConvertProgress = useCallback(({ message }) => {
-    console.log(message);
+    pubSub.publish(pubSubEvents.processLogUpdated, message);
 
     const progress = calculateConvertProgress(message);
 

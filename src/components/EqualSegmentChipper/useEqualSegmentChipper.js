@@ -98,9 +98,9 @@ export default () => {
   }, []);
 
   const updateSplitProgress = useCallback(({ message }) => {
-    const progress = calculateEqualSplitProgress(message);
+    pubSub.publish(pubSubEvents.processLogUpdated, message);
 
-    console.log(message, progress);
+    const progress = calculateEqualSplitProgress(message);
 
     if (progress && progress < 100) {
       setSplitProgress(`Splitting: ${progress.toFixed(2)} %`);

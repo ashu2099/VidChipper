@@ -5,6 +5,7 @@ import EqualSegmentChipper from "../EqualSegmentChipper/EqualSegmentChipper";
 import FormatConverter from "../FormatConvertor/FormatConverter";
 
 import useVidChipper from "./useVidChipper";
+import { Button } from "../UI";
 
 const tabClassName =
   "py-2 flex-1 ui-selected:bg-white ui-selected:text-pink-600 ui-selected:font-[700]";
@@ -17,6 +18,7 @@ export default () => {
     videoFileUploaded,
     ffmpegLoadProgressMsg,
     openFileBrowser,
+    processLog,
   } = useVidChipper();
 
   return (
@@ -24,7 +26,7 @@ export default () => {
       {!isFFmpegLoaded && <div>{ffmpegLoadProgressMsg}</div>}
 
       {isFFmpegLoaded && (
-        <div id="vidChipper" className="flex flex-col mt-8 md:flex-row">
+        <div id="vidChipper" className="flex flex-col mt-5 md:flex-row">
           <div className="flex flex-1 flex-col items-center justify-center">
             <video
               ref={inputVideoRef}
@@ -53,6 +55,17 @@ export default () => {
             >
               <div className="text-xl">Click Here To Select Video !</div>
             </div>
+
+            <Button
+              label="Upload New Video"
+              extendClass={[
+                "mt-2 ml-auto",
+                `${inputVideoBlobUrl ? "" : "hidden"}`,
+              ].join(" ")}
+              onClick={() => {
+                openFileBrowser;
+              }}
+            />
           </div>
 
           <div
@@ -85,6 +98,14 @@ export default () => {
               </Tab.Panels>
             </Tab.Group>
           </div>
+        </div>
+      )}
+
+      {processLog && (
+        <div className="text-center text-pink-200 mt-5 italic">
+          <span>Process Log:</span>
+          <br />
+          <span>{processLog}</span>
         </div>
       )}
     </>

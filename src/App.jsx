@@ -24,7 +24,7 @@ function App() {
 
       <VidChipper />
 
-      <div className="flex justify-center mt-12">
+      <div className="flex justify-center mt-6">
         <span>Made with</span>
 
         <div className="flex mx-1 items-center w-4">

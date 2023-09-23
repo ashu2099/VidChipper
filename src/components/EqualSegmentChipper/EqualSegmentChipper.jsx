@@ -33,13 +33,13 @@ export default () => {
         />
 
         {segmenDurationError && (
-          <p className="text-pink-200 mt-1 italic">{segmenDurationError}</p>
+          <p className="text-pink-200 mt-2 italic">{segmenDurationError}</p>
         )}
       </div>
 
-      <div className="mt-2">
+      <div className="">
         {splitProgress && (
-          <div className="text-pink-200 mb-1 italic">{splitProgress}</div>
+          <div className="text-pink-200 mb-2 italic">{splitProgress}</div>
         )}
 
         <Button
@@ -57,7 +57,7 @@ export default () => {
           <Button
             key={segmentName}
             label={`Download part ${index + 1}`}
-            extendClass="mt-1 mr-1"
+            extendClass="mt-2"
             onClick={() => {
               downloadSplitPart(segmentName);
             }}

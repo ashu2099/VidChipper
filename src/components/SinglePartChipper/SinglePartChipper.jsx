@@ -50,12 +50,12 @@ export default () => {
           className="px-2 py-1 w-32 text-gray-600 rounded-md"
           disabled={isVideoClipping}
         />
-        {endError && <p className="text-pink-200 mt-1 italic">{endError}</p>}
+        {endError && <p className="text-pink-200 mt-2 italic">{endError}</p>}
       </div>
 
-      <div className="mt-2">
+      <div className="">
         {clipProgress && (
-          <div className="text-pink-200 mb-1 italic">{clipProgress}</div>
+          <div className="text-pink-200 mb-2 italic">{clipProgress}</div>
         )}
 
         <Button
@@ -72,7 +72,7 @@ export default () => {
         <div className="">
           <Button
             label={"Download Clipped Video"}
-            extendClass="mt-1"
+            extendClass="mt-2"
             onClick={() => {
               downloadClippedPart("outputee");
             }}
